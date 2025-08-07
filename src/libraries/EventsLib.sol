@@ -21,6 +21,10 @@ library EventsLib {
     /// @param newFeeRecipient The new fee recipient.
     event SetFeeRecipient(address indexed newFeeRecipient);
 
+    /// @notice Emitted when setting a new default market fee.
+    /// @param newFee The new fee.
+    event SetDefaultMarketFee(uint256 newFee);
+
     /// @notice Emitted when enabling an IRM.
     /// @param irm The IRM that was enabled.
     event EnableIrm(address indexed irm);
