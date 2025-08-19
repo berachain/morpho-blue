@@ -83,6 +83,7 @@ contract Morpho is IMorphoStaticTyping {
         defaultMarketFee = INIT_FEE;
 
         emit EventsLib.SetOwner(newOwner);
+        emit EventsLib.SetDefaultMarketFee(INIT_FEE);
     }
 
     /* MODIFIERS */
