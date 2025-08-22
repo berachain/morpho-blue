@@ -171,11 +171,14 @@ contract Morpho is IMorphoStaticTyping {
 
         // Safe "unchecked" cast.
         market[id].lastUpdate = uint128(block.timestamp);
-        market[id].fee = uint128(defaultMarketFee);
+        if (defaultMarketFee != 0) {
+            market[id].fee = uint128(defaultMarketFee);
+            emit EventsLib.SetFee(id, defaultMarketFee);
+        }
+
         idToMarketParams[id] = marketParams;
 
         emit EventsLib.CreateMarket(id, marketParams);
-        emit EventsLib.SetFee(id, defaultMarketFee);
 
         // Call to initialize the IRM in case it is stateful.
         if (marketParams.irm != address(0)) IIrm(marketParams.irm).borrowRate(marketParams, market[id]);
