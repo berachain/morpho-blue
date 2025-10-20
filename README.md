@@ -7,6 +7,10 @@ It also enables higher collateralization factors, improved interest rates, and l
 The protocol is designed to be a simple, immutable, and governance-minimized base layer that allows for a wide variety of other layers to be built on top.
 Morpho Blue also offers a convenient developer experience with a singleton implementation, callbacks, free flash loans, and account management features.
 
+## BEND changes
+
+The repository contains an additional feature that allows the protocol owner to define a default market fee for all the markets being created after such event.
+
 ## Whitepaper
 
 The protocol is described in detail in the [Morpho Blue Whitepaper](./morpho-blue-whitepaper.pdf).
@@ -41,3 +45,7 @@ All audits are stored in the [audits](./audits/)' folder.
 
 The primary license for Morpho Blue is the Business Source License 1.1 (`BUSL-1.1`), see [`LICENSE`](./LICENSE).
 However, all files in the following folders can also be licensed under `GPL-2.0-or-later` (as indicated in their SPDX headers): [`src/interfaces`](./src/interfaces), [`src/libraries`](./src/libraries), [`src/mocks`](./src/mocks), [`test`](./test), [`certora`](./certora).
+
+This repository includes code originally made available under the Business Source License 1.1 (BUSL-1.1) until 2026. Used with permission from the licensor, Morpho Association. 
+
+This permission is limited to Berachain’s use and does not grant any rights to third parties. All other use remains subject to the BUSL-1.1 license terms.
