@@ -68,6 +68,8 @@ contract Morpho is IMorphoStaticTyping {
     mapping(address => uint256) public nonce;
     /// @inheritdoc IMorphoStaticTyping
     mapping(Id => MarketParams) public idToMarketParams;
+    /// @notice The default market fee
+    uint256 public defaultMarketFee;
 
     /* CONSTRUCTOR */
 
@@ -78,7 +80,10 @@ contract Morpho is IMorphoStaticTyping {
         DOMAIN_SEPARATOR = keccak256(abi.encode(DOMAIN_TYPEHASH, block.chainid, address(this)));
         owner = newOwner;
 
+        defaultMarketFee = INIT_FEE;
+
         emit EventsLib.SetOwner(newOwner);
+        emit EventsLib.SetDefaultMarketFee(INIT_FEE);
     }
 
     /* MODIFIERS */
@@ -144,6 +149,17 @@ contract Morpho is IMorphoStaticTyping {
         emit EventsLib.SetFeeRecipient(newFeeRecipient);
     }
 
+    /// @notice Sets the new default market fee for all the future markets.
+    /// @dev This won't affect the markets already created with the previous value.
+    function setDefaultMarketFee(uint256 newFee) external onlyOwner {
+        require(newFee != defaultMarketFee, ErrorsLib.ALREADY_SET);
+        require(newFee <= MAX_FEE, ErrorsLib.MAX_FEE_EXCEEDED);
+
+        defaultMarketFee = newFee;
+
+        emit EventsLib.SetDefaultMarketFee(newFee);
+    }
+
     /* MARKET CREATION */
 
     /// @inheritdoc IMorphoBase
@@ -155,9 +171,15 @@ contract Morpho is IMorphoStaticTyping {
 
         // Safe "unchecked" cast.
         market[id].lastUpdate = uint128(block.timestamp);
+
         idToMarketParams[id] = marketParams;
 
         emit EventsLib.CreateMarket(id, marketParams);
+
+        if (defaultMarketFee != 0) {
+            market[id].fee = uint128(defaultMarketFee);
+            emit EventsLib.SetFee(id, defaultMarketFee);
+        }
 
         // Call to initialize the IRM in case it is stateful.
         if (marketParams.irm != address(0)) IIrm(marketParams.irm).borrowRate(marketParams, market[id]);
